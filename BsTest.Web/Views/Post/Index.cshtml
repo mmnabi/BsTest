@@ -1,0 +1,73 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<script src="~/Resourses/AngularControllers/postController.js"></script>
+
+<div ng-controller="dynamicPagedListController" ng-init="init()">
+    <h1>@Model</h1>
+    <div class="container-fluid" style="margin-bottom: 20px">
+        <div class="col-md-offset-8 col-md-4">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search for..."
+                       ng-keyup="$event.keyCode == 13 ? pageChanged(): null" ng-model="searchString">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" ng-click="pageChanged()">Go!</button>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover tabel-condensed">
+            <tbody ng-repeat="post in registerData">
+                <tr style="color:deepskyblue; font-weight:bold;">
+                    <td>{{ post.PostContent }}</td>
+                    <td>{{ post.UserName }}</td>
+                    <td>{{ post.CreatedAtLocal | date :'MM/dd/yyyy h:mma' : 'new Date().getTimezoneOffset()' }}</td>
+                    <td>{{ post.CommentCount }} Comments</td>
+                </tr>
+                <tr ng-repeat="e in post.Comments">
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-comment" aria-hidden="true"></i> {{  e.Comment }}</td>
+                    <td>{{ e.UserName }}</td>
+                    <td>{{ e.CreatedAtLocal | date :'MM/dd/yyyy h:mma' : 'new Date().getTimezoneOffset()' }}</td>
+                    <td>
+                        <i class="fa fa-thumbs-up" aria-hidden="true">{{ e.Likes  }}</i>
+                        <i class="fa fa-thumbs-down" aria-hidden="true"> {{ e.Dislikes }}</i>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="6">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-sm-4" style="margin: 20px 0">
+                                    <label class="col-sm-5 control-label">Rows to show:</label>
+                                    <div class="col-sm-3">
+                                        <select id="ddlPageSize" class="form-control"
+                                                ng-model="pageSize"
+                                                ng-change="changePageSize()" ng-options="n for n in pageIndexes">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-8">
+                                    <ul uib-pagination total-items="TotalItems" ng-model="pageIndex" items-per-page="pageSize"
+                                        ng-change="pageChanged()" class="pagination-sm pull-right" boundary-links="true"
+                                        num-pages="TotalPages" max-size="5" rotate="true"></ul>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-offset-4 col-sm-8">
+                                    <span class="pull-right">Total Post: {{ TotalItems }}; Page: {{pageIndex}} / {{TotalPages}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

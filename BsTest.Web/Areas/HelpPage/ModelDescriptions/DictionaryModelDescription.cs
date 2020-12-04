@@ -1,0 +1,6 @@
+namespace BsTest.Web.Areas.HelpPage.ModelDescriptions
+{
+    public class DictionaryModelDescription : KeyValuePairModelDescription
+    {
+    }
+}
